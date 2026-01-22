@@ -1,7 +1,7 @@
 import { PrismaService } from '@/src/core/prisma/prisma.service';
 import {
+	BadRequestException,
 	Injectable,
-	InternalServerErrorException,
 	NotFoundException,
 	UnauthorizedException,
 } from '@nestjs/common';
@@ -11,6 +11,8 @@ import type { Request } from 'express';
 import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { RedisService } from '@/src/core/redis/redis.service';
 import { ConfigService } from '@nestjs/config';
+import { destroySession, saveSession } from '@/src/shared/utils/session.util';
+import { VerificationService } from '../verification/verification.service';
 
 @Injectable()
 export class SessionService {
@@ -18,6 +20,7 @@ export class SessionService {
 		private readonly prismaService: PrismaService,
 		private readonly configService: ConfigService,
 		private readonly redisService: RedisService,
+		private readonly verificationService: VerificationService,
 	) {}
 
 	public async findByUser(req: Request) {
@@ -85,39 +88,20 @@ export class SessionService {
 			throw new UnauthorizedException('Invalid credentials');
 		}
 
+		if (!user.isEmailVerified) {
+			await this.verificationService.sendVerificationToken(user);
+			throw new BadRequestException(
+				'Email not verified. Verification email sent.',
+			);
+		}
+
 		const metadata = getSessionMetadata(req, userAgent);
 
-		return new Promise((resolve, reject) => {
-			req.session.createdAt = new Date();
-			req.session.userId = user.id;
-			req.session.metadata = metadata;
-			req.session.save(err => {
-				if (err) {
-					return reject(
-						new InternalServerErrorException(
-							'Could not save session',
-						),
-					);
-				}
-				resolve(user);
-			});
-		});
+		return saveSession(req, user, metadata);
 	}
 
 	public async logout(req: Request) {
-		return new Promise((resolve, reject) => {
-			req.session.destroy(err => {
-				if (err) {
-					return reject(
-						new InternalServerErrorException(
-							'Could not destroy session',
-						),
-					);
-				}
-
-				resolve(true);
-			});
-		});
+		return destroySession(req);
 	}
 
 	public async remove(req: Request, id: string) {

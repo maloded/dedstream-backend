@@ -2,10 +2,14 @@ import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './inputs/create-user.input';
 import { hash } from 'argon2';
+import { VerificationService } from '../verification/verification.service';
 
 @Injectable()
 export class AccountService {
-	public constructor(private readonly prismaService: PrismaService) {}
+	public constructor(
+		private readonly prismaService: PrismaService,
+		private readonly verificationService: VerificationService,
+	) {}
 
 	public async me(id: string) {
 		const user = await this.prismaService.user.findUnique({
@@ -29,7 +33,7 @@ export class AccountService {
 		if (isEmailExists) {
 			throw new ConflictException('Email already exists');
 		}
-		await this.prismaService.user.create({
+		const user = await this.prismaService.user.create({
 			data: {
 				username,
 				email,
@@ -37,6 +41,8 @@ export class AccountService {
 				displayName: username,
 			},
 		});
+
+		await this.verificationService.sendVerificationToken(user);
 		return true;
 	}
 }
