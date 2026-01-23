@@ -5,6 +5,7 @@ import { render } from '@react-email/components';
 import { VerificationTemplate } from './templates/verification.template';
 import { PasswordRecoveryTemplate } from './templates/password-recovery.template';
 import type { SessionMetadata } from '@/src/shared/types/session-metadata.types';
+import { DeactivateTemplate } from './templates/deactivate.template';
 
 @Injectable()
 export class MailService {
@@ -33,6 +34,17 @@ export class MailService {
 
 		//eslint-disable-next-line
 		return this.sendMail(email, 'Reset your password', html);
+	}
+
+	public async sendDeactivateToken(
+		email: string,
+		token: string,
+		metadata: SessionMetadata,
+	) {
+		const html = await render(DeactivateTemplate({ token, metadata }));
+
+		//eslint-disable-next-line
+		return this.sendMail(email, 'Deactivate your account', html);
 	}
 
 	private sendMail(email: string, subject: string, html: string) {
