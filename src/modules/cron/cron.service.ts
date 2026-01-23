@@ -10,8 +10,8 @@ export class CronService {
 		// private readonly mailService: MailService,
 	) {}
 
-	@Cron('*/10 * * * * *')
-	// @Cron('0 0 * * *')
+	// @Cron('*/10 * * * * *')
+	@Cron('0 0 * * *')
 	public async deleteDeactivationAccounts() {
 		const sevenDaysAgo = new Date();
 		sevenDaysAgo.setDate(sevenDaysAgo.getDay() - 7);
