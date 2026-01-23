@@ -6,6 +6,7 @@ import { VerificationTemplate } from './templates/verification.template';
 import { PasswordRecoveryTemplate } from './templates/password-recovery.template';
 import type { SessionMetadata } from '@/src/shared/types/session-metadata.types';
 import { DeactivateTemplate } from './templates/deactivate.template';
+import { AccountDeletionTemplate } from './templates/account-deletion.template';
 
 @Injectable()
 export class MailService {
@@ -45,6 +46,13 @@ export class MailService {
 
 		//eslint-disable-next-line
 		return this.sendMail(email, 'Deactivate your account', html);
+	}
+
+	public async sendAccountDeletion(email: string) {
+		const html = await render(AccountDeletionTemplate());
+
+		//eslint-disable-next-line
+		return this.sendMail(email, 'Account was deleted', html);
 	}
 
 	private sendMail(email: string, subject: string, html: string) {
