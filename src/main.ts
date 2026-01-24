@@ -8,7 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ms, type StringValue } from './shared/utils/ms.util';
 import { parseBoolean } from './shared/utils/parse-boolean.unit';
 import { RedisService } from './core/redis/redis.service';
-
+import { graphqlUploadExpress } from 'graphql-upload-minimal';
 async function bootstrap() {
 	const app = await NestFactory.create(CoreModule);
 
@@ -19,6 +19,10 @@ async function bootstrap() {
 	const redis = app.get(RedisService);
 
 	app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')));
+	app.use(
+		config.getOrThrow<string>('GRAPHQL_PREFIX'),
+		graphqlUploadExpress(),
+	);
 
 	app.useGlobalPipes(
 		new ValidationPipe({
@@ -44,7 +48,6 @@ async function bootstrap() {
 				sameSite: 'lax',
 			},
 			store: new RedisStore({
-				// eslint-disable-next-line
 				client: redis.client,
 				prefix: config.getOrThrow<string>('REDIS_SESSION_PREFIX'),
 			}),
