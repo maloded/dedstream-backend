@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   SocialLink: 'SocialLink',
-  Token: 'Token'
+  Token: 'Token',
+  Stream: 'Stream'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -117,6 +118,22 @@ export const TokenScalarFieldEnum = {
 } as const
 
 export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof TokenScalarFieldEnum]
+
+
+export const StreamScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  thumbnailUrl: 'thumbnailUrl',
+  ingressId: 'ingressId',
+  serverUrl: 'serverUrl',
+  streamKey: 'streamKey',
+  isLive: 'isLive',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StreamScalarFieldEnum = (typeof StreamScalarFieldEnum)[keyof typeof StreamScalarFieldEnum]
 
 
 export const SortOrder = {
