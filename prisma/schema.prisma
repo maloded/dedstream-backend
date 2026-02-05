@@ -77,19 +77,20 @@ enum TokenType {
 model Stream {
   id String @id @default(uuid())
 
-  title       String
+  title        String
   thumbnailUrl String? @map("thumbnail_url")
 
-  ingressId  String? @unique  @map("ingress_id")
-  serverUrl  String? @map("server_url")
-  streamKey  String? @unique  @map("stream_key")
+  ingressId String? @unique @map("ingress_id")
+  serverUrl String? @map("server_url")
+  streamKey String? @unique @map("stream_key")
 
-  isLive     Boolean @default(false) @map("is_live")
+  isLive Boolean @default(false) @map("is_live")
 
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String? @unique  @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @unique @map("user_id")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@map("streams")
 }

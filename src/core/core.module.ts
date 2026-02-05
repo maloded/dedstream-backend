@@ -17,6 +17,10 @@ import { CronModule } from '../modules/cron/cron.module';
 import { StorageModule } from '../modules/libs/storage/storage.module';
 import { ProfileModule } from '../modules/auth/profile/profile.module';
 import { StreamModule } from '../modules/stream/stream.module';
+import { LivekitModule } from '../modules/libs/livekit/livekit.module';
+import { getLivekitConfig } from './config/livekit.config';
+import { IngressModule } from '../modules/stream/ingress/ingress.module';
+import { WebhookModule } from '../modules/webhook/webhook.module';
 
 @Module({
 	imports: [
@@ -42,7 +46,14 @@ import { StreamModule } from '../modules/stream/stream.module';
 		DeactivateModule,
 		CronModule,
 		StorageModule,
+		LivekitModule.registerAsync({
+			imports: [ConfigModule],
+			useFactory: getLivekitConfig,
+			inject: [ConfigService],
+		}),
 		StreamModule,
+		IngressModule,
+		WebhookModule,
 	],
 })
 export class CoreModule {}
