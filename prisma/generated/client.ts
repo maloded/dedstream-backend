@@ -59,3 +59,8 @@ export type Token = Prisma.TokenModel
  * 
  */
 export type Stream = Prisma.StreamModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
