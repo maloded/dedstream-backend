@@ -31,6 +31,9 @@ model User {
   stream       Stream?
   chatMessages ChatMessage[]
 
+  followers Follow[] @relation(name: "followers")
+  followings Follow[] @relation(name: "followings")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -85,9 +88,9 @@ model Stream {
   serverUrl String? @map("server_url")
   streamKey String? @unique @map("stream_key")
 
-  isLive Boolean @default(false) @map("is_live")
-  isChatEnabled Boolean @default(true) @map("is_chat_enabled")
-  isChatFollowersOnly Boolean @default(false) @map("is_chat_followers_only")
+  isLive                     Boolean @default(false) @map("is_live")
+  isChatEnabled              Boolean @default(true) @map("is_chat_enabled")
+  isChatFollowersOnly        Boolean @default(false) @map("is_chat_followers_only")
   isChatPremiumFollowersOnly Boolean @default(false) @map("is_chat_premium_followers_only")
 
   chatMessages ChatMessage[]
@@ -112,9 +115,9 @@ model ChatMessage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String? @map("user_id")
+  userId    String?  @map("user_id")
   stream    Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId  String? @map("stream_id")
+  streamId  String?  @map("stream_id")
 
   @@map("chat_messages")
 }
@@ -133,4 +136,22 @@ model Category {
   updatedAt DateTime @updatedAt
 
   @@map("categories")
+}
+
+model Follow {
+  id String @id @default(uuid())
+
+  follower   User   @relation(name: "followers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId String @map("follower_id")
+
+  following   User   @relation(name: "followings", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String @map("following_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
 }
