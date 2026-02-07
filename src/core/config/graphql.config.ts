@@ -15,5 +15,6 @@ export function getGraphQLConfig(
 			req,
 			res,
 		}),
+		installSubscriptionHandlers: true,
 	};
 }
