@@ -17,6 +17,8 @@ model User {
   avatar String?
   bio    String?
 
+  telegramId String? @map("telegram_id")
+
   isVerified      Boolean @default(false) @map("is_verified")
   isEmailVerified Boolean @default(false) @map("is_email_verified")
 
@@ -26,12 +28,14 @@ model User {
   isDeactivated Boolean   @default(false) @map("is_deactivated")
   deactivatedAt DateTime? @map("deactivated_at")
 
-  tokens       Token[]
-  socialLinks  SocialLink[]
-  stream       Stream?
-  chatMessages ChatMessage[]
+  tokens               Token[]
+  socialLinks          SocialLink[]
+  stream               Stream?
+  notificationSettings NotificationSettings?
+  chatMessages         ChatMessage[]
+  notifications        Notification[]
 
-  followers Follow[] @relation(name: "followers")
+  followers  Follow[] @relation(name: "followers")
   followings Follow[] @relation(name: "followings")
 
   createdAt DateTime @default(now())
@@ -74,8 +78,19 @@ enum TokenType {
   EMAIL_VERIFICATION
   PASSWORD_RESET
   DEACTIVATE_ACCOUNT
+  TELEGRAM_AUTH
 
   @@map("token_types")
+}
+
+enum NotificationType {
+  STREAM_START
+  NEW_FOLLOWER
+  NEW_SPONSORSHIP
+  ENABLE_TWO_FACTOR
+  VERIFIED_CHANNEL
+
+  @@map("notification_types")
 }
 
 model Stream {
@@ -154,4 +169,35 @@ model Follow {
   @@index([followerId])
   @@index([followingId])
   @@map("follows")
+}
+
+model Notification {
+  id String @id @default(uuid())
+
+  message String
+  type    NotificationType
+  isRead  Boolean          @default(false) @map("is_read")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @map("user_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+model NotificationSettings {
+  id String @id @default(uuid())
+
+  siteNotifications     Boolean @default(true) @map("site_notifications")
+  telegramNotifications Boolean @default(true) @map("telegram_notifications")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @unique @map("user_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notification_settings")
 }
