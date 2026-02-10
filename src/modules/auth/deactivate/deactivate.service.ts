@@ -13,12 +13,14 @@ import { generateToken } from '@/src/shared/utils/generate-token-util';
 import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { DeactivateAccountInput } from './inputs/deactivate-account.input';
 import { verify } from 'argon2';
+import { TelegramService } from '../../libs/telegram/telegram.service';
 
 @Injectable()
 export class DeactivateService {
 	constructor(
 		private readonly prismaService: PrismaService,
 		// private readonly mailService: MailService,
+		private readonly telegramService: TelegramService,
 	) {}
 
 	public async deactivate(
@@ -84,22 +86,31 @@ export class DeactivateService {
 		user: User,
 		userAgent: string,
 	) {
-		// const deactivateToken =
-		await generateToken(
+		const deactivateToken = await generateToken(
 			this.prismaService,
 			user,
 			TokenType.DEACTIVATE_ACCOUNT,
 			false,
 		);
 
-		// const metadata =
-		getSessionMetadata(req, userAgent);
+		const metadata = getSessionMetadata(req, userAgent);
 
 		// await this.mailService.sendDeactivateToken(
 		// 	user.email,
 		// 	deactivateToken.token,
 		// 	metadata,
 		// );
+
+		if (
+			deactivateToken.user?.notificationSettings?.telegramNotifications &&
+			deactivateToken.user.telegramId
+		) {
+			await this.telegramService.sendDeactivateToken(
+				deactivateToken.user.telegramId,
+				deactivateToken.token,
+				metadata,
+			);
+		}
 
 		return true;
 	}

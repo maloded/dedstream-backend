@@ -3,6 +3,6 @@ import { PasswordRecoveryService } from './password-recovery.service';
 import { PasswordRecoveryResolver } from './password-recovery.resolver';
 
 @Module({
-  providers: [PasswordRecoveryResolver, PasswordRecoveryService],
+	providers: [PasswordRecoveryResolver, PasswordRecoveryService],
 })
 export class PasswordRecoveryModule {}

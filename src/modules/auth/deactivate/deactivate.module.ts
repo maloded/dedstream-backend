@@ -3,6 +3,6 @@ import { DeactivateService } from './deactivate.service';
 import { DeactivateResolver } from './deactivate.resolver';
 
 @Module({
-  providers: [DeactivateResolver, DeactivateService],
+	providers: [DeactivateResolver, DeactivateService],
 })
 export class DeactivateModule {}

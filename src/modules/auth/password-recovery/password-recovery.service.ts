@@ -13,12 +13,14 @@ import { TokenType } from '@/prisma/generated/enums';
 import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { NewPasswordInput } from './inputs/new-password.input';
 import { hash } from 'argon2';
+import { TelegramService } from '../../libs/telegram/telegram.service';
 
 @Injectable()
 export class PasswordRecoveryService {
 	public constructor(
 		private readonly prismaService: PrismaService,
 		private readonly mailerService: MailerService,
+		private readonly telegramService: TelegramService,
 	) {}
 
 	public async resetPassword(
@@ -30,6 +32,9 @@ export class PasswordRecoveryService {
 
 		const user = await this.prismaService.user.findUnique({
 			where: { email },
+			include: {
+				notificationSettings: true,
+			},
 		});
 
 		if (!user) {
@@ -38,21 +43,32 @@ export class PasswordRecoveryService {
 			);
 		}
 
-		// const resetToken =
-		await generateToken(
+		const resetToken = await generateToken(
 			this.prismaService,
 			user,
 			TokenType.PASSWORD_RESET,
 			true,
 		);
 
-		getSessionMetadata(req, userAgent);
+		const metadata = getSessionMetadata(req, userAgent);
 
 		// await this.mailerService.sendPasswordResetToken(
 		// 	user.email,
 		// 	resetToken,
 		// 	metadata,
 		// );
+
+		if (
+			resetToken.user &&
+			resetToken.user.notificationSettings?.telegramNotifications &&
+			resetToken.user.telegramId
+		) {
+			await this.telegramService.sendPasswordResetToken(
+				resetToken.user.telegramId,
+				resetToken.token,
+				metadata,
+			);
+		}
 
 		return true;
 	}
