@@ -65,6 +65,12 @@ type ChatMessageModel {
   userId: String!
 }
 
+input CreatePlanInput {
+  description: String
+  price: Float!
+  title: String!
+}
+
 input CreateUserInput {
   displayName: String!
   email: String!
@@ -132,6 +138,10 @@ input LoginInput {
   pin: String
 }
 
+type MakePaymentModel {
+  url: String!
+}
+
 type Mutation {
   changeChatSettings(data: ChangeChatSettingInput!): Boolean!
   changeEmail(data: ChangeEmailInput!): Boolean!
@@ -144,6 +154,7 @@ type Mutation {
   clearSession: Boolean!
   createIngress(ingressType: Float!): Boolean!
   createSocialLink(data: SocialLinkInput!): Boolean!
+  createSponsorshipPlan(data: CreatePlanInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!
 
   """Deactivate account"""
@@ -154,10 +165,12 @@ type Mutation {
   generateStreamToken(data: GenerateStreamTokenInput!): GenerateStreamTokenModel!
   loginUser(data: LoginInput!): AuthModel!
   logoutUser: Boolean!
+  makePayment(planId: String!): MakePaymentModel!
   newPassword(data: NewPasswordInput!): Boolean!
   removeProfileAvatar: Boolean!
   removeSession(id: String!): Boolean!
   removeSocialLink(id: String!): Boolean!
+  removeSponsorshipPlan(planId: String!): Boolean!
   removeStreamThumbnail: Boolean!
   reorderSocialLink(list: [SocialLinkOrderInput!]!): Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean!
@@ -202,6 +215,19 @@ enum NotificationType {
   VERIFIED_CHANNEL
 }
 
+type PlanModel {
+  channel: UserModel!
+  channelId: String!
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  price: Float!
+  stripePlanId: String!
+  stripeProductId: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
 type Query {
   findAllCategories: [CategoryModel!]!
   findAllStreams(filters: FiltersInput!): [StreamModel!]!
@@ -212,6 +238,9 @@ type Query {
   findFollowersCountByChannel(channelId: String!): Float!
   findMyFollowers: [FollowModel!]!
   findMyFollowings: [FollowModel!]!
+  findMySponsors: [SubscriptionModel!]!
+  findMySponsorshipPlans: [PlanModel!]!
+  findMyTransactions: [TransactionModel!]!
   findNotificationsByUser: [NotificationModel!]!
   findProfile: UserModel!
   findRandomCategories: [CategoryModel!]!
@@ -219,6 +248,7 @@ type Query {
   findRecommendedChannels: [UserModel!]!
   findSessionsByUser: [SessionModel!]!
   findSocialLinks: [SocialLinkModel!]!
+  findSponsorsByChannel(channelId: String!): [SubscriptionModel!]!
   findUnreadNotificationsCount: Float!
   generateTotpSecret: TotpModel!
 }
@@ -289,9 +319,41 @@ type Subscription {
   chatMessageAdded(streamId: String!): ChatMessageModel!
 }
 
+type SubscriptionModel {
+  channel: UserModel!
+  channelId: String!
+  createdAt: DateTime!
+  expiresAt: DateTime!
+  id: ID!
+  plan: PlanModel!
+  planId: String!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
 type TotpModel {
   qrcodeUrl: String!
   secret: String!
+}
+
+type TransactionModel {
+  amount: Float!
+  createdAt: DateTime!
+  currency: String!
+  id: ID!
+  status: TransactionStatusType!
+  stripeSubscriptionId: String!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
+enum TransactionStatusType {
+  EXPIRED
+  FAILED
+  PENDING
+  SUCCESS
 }
 
 """The `Upload` scalar type represents a file upload."""

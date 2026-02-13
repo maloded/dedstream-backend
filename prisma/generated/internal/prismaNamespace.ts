@@ -392,7 +392,10 @@ export const ModelName = {
   Category: 'Category',
   Follow: 'Follow',
   Notification: 'Notification',
-  NotificationSettings: 'NotificationSettings'
+  NotificationSettings: 'NotificationSettings',
+  Transaction: 'Transaction',
+  SponsorshipPlan: 'SponsorshipPlan',
+  SponsorshipSubscription: 'SponsorshipSubscription'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "socialLink" | "token" | "stream" | "chatMessage" | "category" | "follow" | "notification" | "notificationSettings"
+    modelProps: "user" | "socialLink" | "token" | "stream" | "chatMessage" | "category" | "follow" | "notification" | "notificationSettings" | "transaction" | "sponsorshipPlan" | "sponsorshipSubscription"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1081,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Transaction: {
+      payload: Prisma.$TransactionPayload<ExtArgs>
+      fields: Prisma.TransactionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransactionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransactionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>
+        }
+        findFirst: {
+          args: Prisma.TransactionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransactionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>
+        }
+        findMany: {
+          args: Prisma.TransactionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+        }
+        create: {
+          args: Prisma.TransactionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>
+        }
+        createMany: {
+          args: Prisma.TransactionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransactionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+        }
+        delete: {
+          args: Prisma.TransactionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>
+        }
+        update: {
+          args: Prisma.TransactionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransactionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransactionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransactionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransactionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionPayload>
+        }
+        aggregate: {
+          args: Prisma.TransactionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransaction>
+        }
+        groupBy: {
+          args: Prisma.TransactionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransactionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionCountAggregateOutputType> | number
+        }
+      }
+    }
+    SponsorshipPlan: {
+      payload: Prisma.$SponsorshipPlanPayload<ExtArgs>
+      fields: Prisma.SponsorshipPlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SponsorshipPlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SponsorshipPlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>
+        }
+        findFirst: {
+          args: Prisma.SponsorshipPlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SponsorshipPlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>
+        }
+        findMany: {
+          args: Prisma.SponsorshipPlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>[]
+        }
+        create: {
+          args: Prisma.SponsorshipPlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>
+        }
+        createMany: {
+          args: Prisma.SponsorshipPlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SponsorshipPlanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>[]
+        }
+        delete: {
+          args: Prisma.SponsorshipPlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>
+        }
+        update: {
+          args: Prisma.SponsorshipPlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.SponsorshipPlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SponsorshipPlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SponsorshipPlanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>[]
+        }
+        upsert: {
+          args: Prisma.SponsorshipPlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipPlanPayload>
+        }
+        aggregate: {
+          args: Prisma.SponsorshipPlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSponsorshipPlan>
+        }
+        groupBy: {
+          args: Prisma.SponsorshipPlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SponsorshipPlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SponsorshipPlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SponsorshipPlanCountAggregateOutputType> | number
+        }
+      }
+    }
+    SponsorshipSubscription: {
+      payload: Prisma.$SponsorshipSubscriptionPayload<ExtArgs>
+      fields: Prisma.SponsorshipSubscriptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SponsorshipSubscriptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SponsorshipSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>
+        }
+        findFirst: {
+          args: Prisma.SponsorshipSubscriptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SponsorshipSubscriptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>
+        }
+        findMany: {
+          args: Prisma.SponsorshipSubscriptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>[]
+        }
+        create: {
+          args: Prisma.SponsorshipSubscriptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>
+        }
+        createMany: {
+          args: Prisma.SponsorshipSubscriptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SponsorshipSubscriptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>[]
+        }
+        delete: {
+          args: Prisma.SponsorshipSubscriptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>
+        }
+        update: {
+          args: Prisma.SponsorshipSubscriptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.SponsorshipSubscriptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SponsorshipSubscriptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SponsorshipSubscriptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.SponsorshipSubscriptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SponsorshipSubscriptionPayload>
+        }
+        aggregate: {
+          args: Prisma.SponsorshipSubscriptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSponsorshipSubscription>
+        }
+        groupBy: {
+          args: Prisma.SponsorshipSubscriptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SponsorshipSubscriptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SponsorshipSubscriptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SponsorshipSubscriptionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1246,6 +1471,48 @@ export const NotificationSettingsScalarFieldEnum = {
 export type NotificationSettingsScalarFieldEnum = (typeof NotificationSettingsScalarFieldEnum)[keyof typeof NotificationSettingsScalarFieldEnum]
 
 
+export const TransactionScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  currency: 'currency',
+  stripeSubscriptionId: 'stripeSubscriptionId',
+  status: 'status',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const SponsorshipPlanScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  price: 'price',
+  stripeProductId: 'stripeProductId',
+  stripePlanId: 'stripePlanId',
+  channelId: 'channelId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SponsorshipPlanScalarFieldEnum = (typeof SponsorshipPlanScalarFieldEnum)[keyof typeof SponsorshipPlanScalarFieldEnum]
+
+
+export const SponsorshipSubscriptionScalarFieldEnum = {
+  id: 'id',
+  expiresAt: 'expiresAt',
+  planId: 'planId',
+  userId: 'userId',
+  channelId: 'channelId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SponsorshipSubscriptionScalarFieldEnum = (typeof SponsorshipSubscriptionScalarFieldEnum)[keyof typeof SponsorshipSubscriptionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1366,6 +1633,20 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
+
+/**
+ * Reference to a field of type 'TransactionStatusType'
+ */
+export type EnumTransactionStatusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatusType'>
+    
+
+
+/**
+ * Reference to a field of type 'TransactionStatusType[]'
+ */
+export type ListEnumTransactionStatusTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatusType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1470,6 +1751,9 @@ export type GlobalOmitConfig = {
   follow?: Prisma.FollowOmit
   notification?: Prisma.NotificationOmit
   notificationSettings?: Prisma.NotificationSettingsOmit
+  transaction?: Prisma.TransactionOmit
+  sponsorshipPlan?: Prisma.SponsorshipPlanOmit
+  sponsorshipSubscription?: Prisma.SponsorshipSubscriptionOmit
 }
 
 /* Types for Logging */

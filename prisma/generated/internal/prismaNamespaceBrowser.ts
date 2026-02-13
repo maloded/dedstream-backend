@@ -59,7 +59,10 @@ export const ModelName = {
   Category: 'Category',
   Follow: 'Follow',
   Notification: 'Notification',
-  NotificationSettings: 'NotificationSettings'
+  NotificationSettings: 'NotificationSettings',
+  Transaction: 'Transaction',
+  SponsorshipPlan: 'SponsorshipPlan',
+  SponsorshipSubscription: 'SponsorshipSubscription'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -205,6 +208,48 @@ export const NotificationSettingsScalarFieldEnum = {
 } as const
 
 export type NotificationSettingsScalarFieldEnum = (typeof NotificationSettingsScalarFieldEnum)[keyof typeof NotificationSettingsScalarFieldEnum]
+
+
+export const TransactionScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  currency: 'currency',
+  stripeSubscriptionId: 'stripeSubscriptionId',
+  status: 'status',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const SponsorshipPlanScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  price: 'price',
+  stripeProductId: 'stripeProductId',
+  stripePlanId: 'stripePlanId',
+  channelId: 'channelId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SponsorshipPlanScalarFieldEnum = (typeof SponsorshipPlanScalarFieldEnum)[keyof typeof SponsorshipPlanScalarFieldEnum]
+
+
+export const SponsorshipSubscriptionScalarFieldEnum = {
+  id: 'id',
+  expiresAt: 'expiresAt',
+  planId: 'planId',
+  userId: 'userId',
+  channelId: 'channelId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SponsorshipSubscriptionScalarFieldEnum = (typeof SponsorshipSubscriptionScalarFieldEnum)[keyof typeof SponsorshipSubscriptionScalarFieldEnum]
 
 
 export const SortOrder = {

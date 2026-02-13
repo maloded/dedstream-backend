@@ -7,7 +7,7 @@ import { Context, Telegraf } from 'telegraf';
 import { MESSAGES } from './telegram.messages';
 import { BUTTONS } from './telegram.buttons';
 import type { SessionMetadata } from '@/src/shared/types/session-metadata.types';
-import type { User } from '@/prisma/generated/client';
+import type { SponsorshipPlan, User } from '@/prisma/generated/client';
 
 @Update()
 @Injectable()
@@ -163,10 +163,21 @@ export class TelegramService extends Telegraf {
 		if (user) {
 			await this.telegram.sendMessage(
 				chatId,
-				// eslint-disable-next-line
 				MESSAGES.newFollowing(follower, user?.followings.length),
 			);
 		}
+	}
+
+	public async sendNewSponsorship(
+		chatId: string,
+		plan: SponsorshipPlan,
+		sponsor: User,
+	) {
+		await this.telegram.sendMessage(
+			chatId,
+			MESSAGES.newSponsorship(plan, sponsor),
+			{ parse_mode: 'HTML' },
+		);
 	}
 
 	private async connectTelegram(userId: string, chatId: string) {

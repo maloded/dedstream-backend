@@ -1,4 +1,4 @@
-import type { User } from '@/prisma/generated/client';
+import type { SponsorshipPlan, User } from '@/prisma/generated/client';
 import type { SessionMetadata } from '@/src/shared/types/session-metadata.types';
 
 export const MESSAGES = {
@@ -71,4 +71,11 @@ export const MESSAGES = {
 	newFollowing: (follower: User, followersCount: number) =>
 		`<b>You have new follower!</b>\n\nThis is user <a href="https://dedstream.ua/${follower.username}">` +
 		`${follower.displayName}</a>\n\nFollowers count: ${followersCount}`,
+	newSponsorship: (plan: SponsorshipPlan, sponsor: User) =>
+		`<b>🎉 New Sponsorship!</b>\n\n` +
+		`You have received a new sponsorship for the <b>${plan.title}</b> plan.\n` +
+		`💰 Amount: <b>${plan.price} ₴</b>\n` +
+		`👤 Sponsor: <a href="https://dedstream.com/${sponsor.username}">${sponsor.displayName}</a>\n` +
+		`📅 Date: <b>${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</b>\n\n` +
+		`Thank you for your work and for being part of Dedstream!`,
 };

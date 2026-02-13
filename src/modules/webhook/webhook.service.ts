@@ -3,14 +3,20 @@ import { Injectable } from '@nestjs/common';
 import { LivekitService } from '../libs/livekit/livekit.service';
 import { NotificationService } from '../notification/notification.service';
 import { TelegramService } from '../libs/telegram/telegram.service';
+import Stripe from 'stripe';
+import { TransactionStatusType } from '@/prisma/generated/enums';
+import { ConfigService } from '@nestjs/config';
+import { StripeService } from '../libs/stripe/stripe.service';
 
 @Injectable()
 export class WebhookService {
 	public constructor(
 		private readonly prismaService: PrismaService,
+		private readonly configService: ConfigService,
 		private readonly livekitService: LivekitService,
 		private readonly notificationService: NotificationService,
 		private readonly telegramService: TelegramService,
+		private readonly stripeService: StripeService,
 	) {}
 
 	public async receiveWebhookLivekit(body: string, authorization: string) {
@@ -89,5 +95,106 @@ export class WebhookService {
 				},
 			});
 		}
+	}
+
+	public async receiveWebhookStripe(event: Stripe.Event) {
+		const session = event.data.object as Stripe.Checkout.Session;
+
+		if (event.type === 'checkout.session.completed' && session.metadata) {
+			const planId = session.metadata.planId;
+			const userId = session.metadata.userId;
+			const channelId = session.metadata.channelId;
+
+			const expiresAt = new Date();
+			expiresAt.setDate(expiresAt.getDay() + 30);
+
+			const sponsorshipSubscription =
+				await this.prismaService.sponsorshipSubscription.create({
+					data: {
+						expiresAt,
+						planId,
+						userId,
+						channelId,
+					},
+					include: {
+						plan: true,
+						user: true,
+						channel: {
+							include: {
+								notificationSettings: true,
+							},
+						},
+					},
+				});
+
+			await this.prismaService.transaction.updateMany({
+				where: {
+					stripeSubscriptionId: session.id,
+					status: TransactionStatusType.PENDING,
+				},
+				data: {
+					status: TransactionStatusType.SUCCESS,
+				},
+			});
+
+			if (
+				sponsorshipSubscription.channel?.notificationSettings
+					?.siteNotifications &&
+				sponsorshipSubscription.plan &&
+				sponsorshipSubscription.user
+			) {
+				await this.notificationService.createNewSponsorship(
+					sponsorshipSubscription.channel.id,
+					sponsorshipSubscription.plan,
+					sponsorshipSubscription.user,
+				);
+			}
+
+			if (
+				sponsorshipSubscription.channel?.notificationSettings
+					?.siteNotifications &&
+				sponsorshipSubscription.channel.telegramId &&
+				sponsorshipSubscription.plan &&
+				sponsorshipSubscription.user
+			) {
+				await this.telegramService.sendNewSponsorship(
+					sponsorshipSubscription.channel.telegramId,
+					sponsorshipSubscription.plan,
+					sponsorshipSubscription.user,
+				);
+			}
+		}
+
+		if (event.type === 'checkout.session.expired') {
+			await this.prismaService.transaction.updateMany({
+				where: {
+					stripeSubscriptionId: session.id,
+				},
+				data: {
+					status: TransactionStatusType.EXPIRED,
+				},
+			});
+		}
+
+		if (event.type === 'checkout.session.async_payment_failed') {
+			await this.prismaService.transaction.updateMany({
+				where: {
+					stripeSubscriptionId: session.id,
+				},
+				data: {
+					status: TransactionStatusType.FAILED,
+				},
+			});
+		}
+	}
+
+	public constructStripeEvent(payload: any, signature: any) {
+		return this.stripeService.webhooks.constructEvent(
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+			payload,
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+			signature,
+			this.configService.getOrThrow<string>('STRIPE_WEBHOOK_SECRET'),
+		);
 	}
 }

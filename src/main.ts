@@ -9,8 +9,9 @@ import { ms, type StringValue } from './shared/utils/ms.util';
 import { parseBoolean } from './shared/utils/parse-boolean.unit';
 import { RedisService } from './core/redis/redis.service';
 import { graphqlUploadExpress } from 'graphql-upload-minimal';
+
 async function bootstrap() {
-	const app = await NestFactory.create(CoreModule);
+	const app = await NestFactory.create(CoreModule, { rawBody: true });
 
 	const config = app.get(ConfigService);
 	const session = sessionPkg as unknown as (
