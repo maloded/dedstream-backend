@@ -104,6 +104,34 @@ export class NotificationService {
 		return notification;
 	}
 
+	public async createEnableTwoFactor(userId: string) {
+		const notification = await this.prismaService.notification.create({
+			data: {
+				message:
+					`<b className='font-medium'>Ensure your account security!</b>\n\n` +
+					`<p>Enable two-factor authentication in your settings.</p>.`,
+				type: NotificationType.ENABLE_TWO_FACTOR,
+				userId,
+			},
+		});
+
+		return notification;
+	}
+
+	public async createVerifyChannel(userId: string) {
+		const notification = await this.prismaService.notification.create({
+			data: {
+				message:
+					`<b className='font-medium'> Congratulations!</b>\n\n` +
+					`<p>Your channel has been verified.</p>.`,
+				type: NotificationType.VERIFIED_CHANNEL,
+				userId,
+			},
+		});
+
+		return notification;
+	}
+
 	public async changeSettings(
 		user: User,
 		input: ChangeNotificationSettingsInput,

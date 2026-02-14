@@ -78,4 +78,12 @@ export const MESSAGES = {
 		`👤 Sponsor: <a href="https://dedstream.com/${sponsor.username}">${sponsor.displayName}</a>\n` +
 		`📅 Date: <b>${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</b>\n\n` +
 		`Thank you for your work and for being part of Dedstream!`,
+	enableTwoFactor:
+		`🔐 Ensure your account security!\n\n` +
+		`Enable two-factor authentication in your <a href="https://dedstream.ua/dashboard/settings">account settings</a>.`,
+	verifyChannel:
+		`<b>🎉 Congratulations! Your channel has been verified</b>\n\n` +
+		`We’re happy to inform you that your channel is now verified and you have received an official badge.\n\n` +
+		`The verification badge confirms the authenticity of your channel and increases viewers' trust.\n\n` +
+		`Thank you for being with us and continuing to grow your channel with Dedstream!`,
 };

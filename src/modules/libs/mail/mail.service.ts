@@ -7,6 +7,8 @@ import { PasswordRecoveryTemplate } from './templates/password-recovery.template
 import type { SessionMetadata } from '@/src/shared/types/session-metadata.types';
 import { DeactivateTemplate } from './templates/deactivate.template';
 import { AccountDeletionTemplate } from './templates/account-deletion.template';
+import { EnableTwoFactorTemplate } from './templates/enable-two-factor.template';
+import { ChannelVerifiedTemplate } from './templates/verify-channel-templante';
 
 @Injectable()
 export class MailService {
@@ -19,7 +21,6 @@ export class MailService {
 		const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGINS');
 		const html = await render(VerificationTemplate({ domain, token }));
 
-		//eslint-disable-next-line
 		return this.sendMail(email, 'Verify your email address', html);
 	}
 
@@ -33,7 +34,6 @@ export class MailService {
 			PasswordRecoveryTemplate({ domain, token, metadata }),
 		);
 
-		//eslint-disable-next-line
 		return this.sendMail(email, 'Reset your password', html);
 	}
 
@@ -44,15 +44,26 @@ export class MailService {
 	) {
 		const html = await render(DeactivateTemplate({ token, metadata }));
 
-		//eslint-disable-next-line
 		return this.sendMail(email, 'Deactivate your account', html);
 	}
 
 	public async sendAccountDeletion(email: string) {
 		const html = await render(AccountDeletionTemplate());
 
-		//eslint-disable-next-line
 		return this.sendMail(email, 'Account was deleted', html);
+	}
+
+	public async sendEnableTwoFactor(email: string) {
+		const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGINS');
+		const html = await render(EnableTwoFactorTemplate({ domain }));
+
+		return this.sendMail(email, 'Secure your account', html);
+	}
+
+	public async sendVerifyChannel(email: string) {
+		const html = await render(ChannelVerifiedTemplate());
+
+		return this.sendMail(email, 'Account was verified', html);
 	}
 
 	private sendMail(email: string, subject: string, html: string) {
