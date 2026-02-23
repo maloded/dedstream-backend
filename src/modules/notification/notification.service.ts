@@ -109,7 +109,7 @@ export class NotificationService {
 			data: {
 				message:
 					`<b className='font-medium'>Ensure your account security!</b>\n\n` +
-					`<p>Enable two-factor authentication in your settings.</p>.`,
+					`<p>Enable two-factor authentication in your settings.</p>`,
 				type: NotificationType.ENABLE_TWO_FACTOR,
 				userId,
 			},
@@ -123,7 +123,7 @@ export class NotificationService {
 			data: {
 				message:
 					`<b className='font-medium'> Congratulations!</b>\n\n` +
-					`<p>Your channel has been verified.</p>.`,
+					`<p>Your channel has been verified.</p>`,
 				type: NotificationType.VERIFIED_CHANNEL,
 				userId,
 			},

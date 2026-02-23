@@ -24,7 +24,6 @@ export class SessionResolver {
 	@Authorization()
 	@Query(() => SessionModel, { name: 'findCurrentSession' })
 	public async findCurrent(@Context() { req }: GqlContext) {
-		// eslint-disable-next-line
 		return this.sessionService.findCurrent(req);
 	}
 
@@ -47,6 +46,7 @@ export class SessionResolver {
 	@Mutation(() => Boolean, { name: 'clearSession' })
 	public clearSession(@Context() { res }: GqlContext) {
 		res.clearCookie(this.config.getOrThrow<string>('SESSION_NAME'));
+		return true;
 	}
 
 	@Authorization()
