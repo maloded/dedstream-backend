@@ -15,11 +15,17 @@ export class DeactivateResolver {
 	@Authorization()
 	@Mutation(() => AuthModel, { description: 'Deactivate account' })
 	public async deactivateAccount(
-		@Context() { req }: GqlContext,
+		@Context() { req, res }: GqlContext,
 		@Args('data') input: DeactivateAccountInput,
 		@Authorized() user: User,
 		@UserAgent() userAgent: string,
 	) {
-		return this.deactivateService.deactivate(req, input, user, userAgent);
+		return this.deactivateService.deactivate(
+			req,
+			res,
+			input,
+			user,
+			userAgent,
+		);
 	}
 }

@@ -5,7 +5,7 @@ import {
 	NotFoundException,
 } from '@nestjs/common';
 // import { MailService } from '../../libs/mail/mail.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { TokenType } from '@/prisma/generated/enums';
 import { destroySession } from '@/src/shared/utils/session.util';
 import type { User } from '@/prisma/generated/client';
@@ -14,6 +14,8 @@ import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util';
 import { DeactivateAccountInput } from './inputs/deactivate-account.input';
 import { verify } from 'argon2';
 import { TelegramService } from '../../libs/telegram/telegram.service';
+import { RedisService } from '@/src/core/redis/redis.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class DeactivateService {
@@ -21,10 +23,13 @@ export class DeactivateService {
 		private readonly prismaService: PrismaService,
 		// private readonly mailService: MailService,
 		private readonly telegramService: TelegramService,
+		private readonly configService: ConfigService,
+		private readonly redisService: RedisService,
 	) {}
 
 	public async deactivate(
 		req: Request,
+		res: Response,
 		input: DeactivateAccountInput,
 		user: User,
 		userAgent: string,
@@ -46,12 +51,16 @@ export class DeactivateService {
 			return { message: 'Deactivation token sent to your email' };
 		}
 
-		await this.validateDeactivateToken(req, pin);
+		await this.validateDeactivateToken(req, res, pin);
 
 		return { user };
 	}
 
-	private async validateDeactivateToken(req: Request, token: string) {
+	private async validateDeactivateToken(
+		req: Request,
+		res: Response,
+		token: string,
+	) {
 		const existingToken = await this.prismaService.token.findUnique({
 			where: { token, type: TokenType.DEACTIVATE_ACCOUNT },
 			include: { user: true },
@@ -67,7 +76,7 @@ export class DeactivateService {
 			throw new BadRequestException('Deactivation token has expired');
 		}
 
-		await this.prismaService.user.update({
+		const user = await this.prismaService.user.update({
 			where: { id: existingToken.userId },
 			data: {
 				isDeactivated: true,
@@ -78,10 +87,15 @@ export class DeactivateService {
 		await this.prismaService.token.delete({
 			where: { id: existingToken.id, type: TokenType.DEACTIVATE_ACCOUNT },
 		});
+
+		await this.clearSessions(user.id);
+
+		res.clearCookie(this.configService.getOrThrow<string>('SESSION_NAME'));
+
 		return destroySession(req);
 	}
 
-	public async sendDeactivateToken(
+	private async sendDeactivateToken(
 		req: Request,
 		user: User,
 		userAgent: string,
@@ -113,5 +127,18 @@ export class DeactivateService {
 		}
 
 		return true;
+	}
+
+	private async clearSessions(userId: string) {
+		const keys = await this.redisService.client.keys('*');
+		for (const key of keys) {
+			const sessionData = await this.redisService.client.get(key);
+			if (!sessionData) continue;
+
+			const session = JSON.parse(sessionData);
+			if (session.userId === userId) {
+				await this.redisService.del(key);
+			}
+		}
 	}
 }

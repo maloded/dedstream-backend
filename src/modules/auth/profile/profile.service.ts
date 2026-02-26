@@ -2,7 +2,7 @@ import { PrismaService } from '@/src/core/prisma/prisma.service';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { StorageService } from '../../libs/storage/storage.service';
 import { User } from '@/prisma/generated/client';
-import { type FileUpload } from 'graphql-upload-minimal';
+import { FileUpload } from 'graphql-upload';
 import sharp from 'sharp';
 import { ChangeProfileInfoInput } from './inputs/change-profile-info.input';
 import {
@@ -31,7 +31,7 @@ export class ProfileService {
 
 		const buffer = Buffer.concat(chunks);
 
-		const fileName = `/channels/${user.username}.webp`;
+		const fileName = `channels/${user.username}.webp`;
 
 		if (file.filename && file.filename.endsWith('.gif')) {
 			const processedBuffer = await sharp(buffer, { animated: true })

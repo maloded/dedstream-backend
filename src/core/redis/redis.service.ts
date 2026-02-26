@@ -33,4 +33,8 @@ export class RedisService {
 			);
 		});
 	}
+
+	async del(key: string): Promise<number> {
+		return this.client.del(key);
+	}
 }

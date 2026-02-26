@@ -8,7 +8,7 @@ import { FiltersInput } from './inputs/filters.input';
 import { Prisma, User } from '@/prisma/generated/client';
 import { ChangeStreamInfoInput } from './inputs/change-stream-info.input';
 import { StorageService } from '../libs/storage/storage.service';
-import { type FileUpload } from 'graphql-upload-minimal';
+import type { FileUpload } from 'graphql-upload/GraphQLUpload.mjs';
 import sharp from 'sharp';
 import { GenerateStreamTokenInput } from './inputs/generate-stream-token.input';
 import { ConfigService } from '@nestjs/config';
@@ -121,7 +121,7 @@ export class StreamService {
 
 		const buffer = Buffer.concat(chunks);
 
-		const fileName = `/streams/${user.username}.webp`;
+		const fileName = `streams/${user.username}.webp`;
 
 		if (file.filename && file.filename.endsWith('.gif')) {
 			const processedBuffer = await sharp(buffer, { animated: true })

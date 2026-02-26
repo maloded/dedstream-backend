@@ -35,6 +35,7 @@ export class StorageService {
 			Key: String(key),
 			Body: buffer,
 			ContentType: mimetype,
+			ACL: 'public-read',
 		};
 
 		await this.client.send(new PutObjectCommand(command));

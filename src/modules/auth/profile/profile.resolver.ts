@@ -6,7 +6,9 @@ import type { User } from '@/prisma/generated/client';
 import { Authorization } from '@/src/shared/decorators/auth.decorator';
 import { FileValidationPipe } from '@/src/shared/pipes/file-validation.pipe';
 import { ChangeProfileInfoInput } from './inputs/change-profile-info.input';
-import { type FileUpload, GraphQLUpload } from 'graphql-upload-minimal';
+import { type FileUpload } from 'graphql-upload';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs';
+
 import {
 	SocialLinkInput,
 	SocialLinkOrderInput,
@@ -58,8 +60,8 @@ export class ProfileResolver {
 	}
 
 	@Authorization()
-	@Mutation(() => Boolean, { name: 'reorderSocialLink' })
-	public async reorderSocialLink(
+	@Mutation(() => Boolean, { name: 'reorderSocialLinks' })
+	public async reorderSocialLinks(
 		@Args('list', { type: () => [SocialLinkOrderInput] })
 		list: SocialLinkOrderInput[],
 	) {

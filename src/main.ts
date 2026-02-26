@@ -8,8 +8,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ms, type StringValue } from './shared/utils/ms.util';
 import { parseBoolean } from './shared/utils/parse-boolean.unit';
 import { RedisService } from './core/redis/redis.service';
-import { graphqlUploadExpress } from 'graphql-upload-minimal';
-
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 async function bootstrap() {
 	const app = await NestFactory.create(CoreModule, { rawBody: true });
 
@@ -22,7 +21,7 @@ async function bootstrap() {
 	app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')));
 	app.use(
 		config.getOrThrow<string>('GRAPHQL_PREFIX'),
-		graphqlUploadExpress(),
+		graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
 	);
 
 	app.useGlobalPipes(
