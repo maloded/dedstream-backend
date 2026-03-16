@@ -164,6 +164,7 @@ export class TelegramService extends Telegraf {
 			await this.telegram.sendMessage(
 				chatId,
 				MESSAGES.newFollowing(follower, user?.followings.length),
+				{ parse_mode: 'HTML' },
 			);
 		}
 	}

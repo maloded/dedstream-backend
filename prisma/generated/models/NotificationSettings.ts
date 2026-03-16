@@ -157,7 +157,7 @@ export type NotificationSettingsGroupByOutputType = {
   id: string
   siteNotifications: boolean
   telegramNotifications: boolean
-  userId: string | null
+  userId: string
   createdAt: Date
   updatedAt: Date
   _count: NotificationSettingsCountAggregateOutputType | null
@@ -187,17 +187,17 @@ export type NotificationSettingsWhereInput = {
   id?: Prisma.StringFilter<"NotificationSettings"> | string
   siteNotifications?: Prisma.BoolFilter<"NotificationSettings"> | boolean
   telegramNotifications?: Prisma.BoolFilter<"NotificationSettings"> | boolean
-  userId?: Prisma.StringNullableFilter<"NotificationSettings"> | string | null
+  userId?: Prisma.StringFilter<"NotificationSettings"> | string
   createdAt?: Prisma.DateTimeFilter<"NotificationSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationSettings"> | Date | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type NotificationSettingsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   siteNotifications?: Prisma.SortOrder
   telegramNotifications?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -213,14 +213,14 @@ export type NotificationSettingsWhereUniqueInput = Prisma.AtLeast<{
   telegramNotifications?: Prisma.BoolFilter<"NotificationSettings"> | boolean
   createdAt?: Prisma.DateTimeFilter<"NotificationSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"NotificationSettings"> | Date | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
 
 export type NotificationSettingsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   siteNotifications?: Prisma.SortOrder
   telegramNotifications?: Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.NotificationSettingsCountOrderByAggregateInput
@@ -235,7 +235,7 @@ export type NotificationSettingsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"NotificationSettings"> | string
   siteNotifications?: Prisma.BoolWithAggregatesFilter<"NotificationSettings"> | boolean
   telegramNotifications?: Prisma.BoolWithAggregatesFilter<"NotificationSettings"> | boolean
-  userId?: Prisma.StringNullableWithAggregatesFilter<"NotificationSettings"> | string | null
+  userId?: Prisma.StringWithAggregatesFilter<"NotificationSettings"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationSettings"> | Date | string
 }
@@ -246,14 +246,14 @@ export type NotificationSettingsCreateInput = {
   telegramNotifications?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutNotificationSettingsInput
+  user: Prisma.UserCreateNestedOneWithoutNotificationSettingsInput
 }
 
 export type NotificationSettingsUncheckedCreateInput = {
   id?: string
   siteNotifications?: boolean
   telegramNotifications?: boolean
-  userId?: string | null
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -264,14 +264,14 @@ export type NotificationSettingsUpdateInput = {
   telegramNotifications?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutNotificationSettingsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutNotificationSettingsNestedInput
 }
 
 export type NotificationSettingsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   siteNotifications?: Prisma.BoolFieldUpdateOperationsInput | boolean
   telegramNotifications?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -280,7 +280,7 @@ export type NotificationSettingsCreateManyInput = {
   id?: string
   siteNotifications?: boolean
   telegramNotifications?: boolean
-  userId?: string | null
+  userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -297,7 +297,7 @@ export type NotificationSettingsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   siteNotifications?: Prisma.BoolFieldUpdateOperationsInput | boolean
   telegramNotifications?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -423,7 +423,7 @@ export type NotificationSettingsSelect<ExtArgs extends runtime.Types.Extensions.
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.NotificationSettings$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationSettings"]>
 
 export type NotificationSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -433,7 +433,7 @@ export type NotificationSettingsSelectCreateManyAndReturn<ExtArgs extends runtim
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.NotificationSettings$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationSettings"]>
 
 export type NotificationSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -443,7 +443,7 @@ export type NotificationSettingsSelectUpdateManyAndReturn<ExtArgs extends runtim
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.NotificationSettings$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationSettings"]>
 
 export type NotificationSettingsSelectScalar = {
@@ -457,25 +457,25 @@ export type NotificationSettingsSelectScalar = {
 
 export type NotificationSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteNotifications" | "telegramNotifications" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["notificationSettings"]>
 export type NotificationSettingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.NotificationSettings$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type NotificationSettingsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.NotificationSettings$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type NotificationSettingsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.NotificationSettings$userArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $NotificationSettingsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NotificationSettings"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     siteNotifications: boolean
     telegramNotifications: boolean
-    userId: string | null
+    userId: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["notificationSettings"]>
@@ -872,7 +872,7 @@ readonly fields: NotificationSettingsFieldRefs;
  */
 export interface Prisma__NotificationSettingsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.NotificationSettings$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NotificationSettings$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1301,25 +1301,6 @@ export type NotificationSettingsDeleteManyArgs<ExtArgs extends runtime.Types.Ext
    * Limit how many NotificationSettings to delete.
    */
   limit?: number
-}
-
-/**
- * NotificationSettings.user
- */
-export type NotificationSettings$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

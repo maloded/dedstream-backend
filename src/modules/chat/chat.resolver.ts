@@ -4,7 +4,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { ChatMessageModel } from './models/chat-message.model';
 import { Authorization } from '@/src/shared/decorators/auth.decorator';
 import { Authorized } from '@/src/shared/decorators/authorized.decorator';
-import { ChangeChatSettingInput } from './inputs/change-chat-setting.input';
+import { ChangeChatSettingsInput } from './inputs/change-chat-setting.input';
 import { type User } from '@/prisma/generated/client';
 import { SendMessageInput } from './inputs/send-message.input';
 
@@ -50,7 +50,7 @@ export class ChatResolver {
 	@Mutation(() => Boolean, { name: 'changeChatSettings' })
 	public async changeSettings(
 		@Authorized() user: User,
-		@Args('data') input: ChangeChatSettingInput,
+		@Args('data') input: ChangeChatSettingsInput,
 	) {
 		return this.chatService.changeSettings(user, input);
 	}

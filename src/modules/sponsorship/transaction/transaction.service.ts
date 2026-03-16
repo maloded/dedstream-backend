@@ -87,7 +87,7 @@ export class TransactionService {
 				},
 			],
 			mode: 'subscription',
-			success_url: `${this.configService.getOrThrow<string>('ALLOWED_ORIGIN')}/success?price=${plan.title}&username=${plan.channel?.username}`,
+			success_url: `${this.configService.getOrThrow<string>('ALLOWED_ORIGIN')}/success?price=${plan.price}&username=${plan.channel?.username}`,
 			cancel_url: this.configService.getOrThrow<string>('ALLOWED_ORIGIN'),
 			customer: customer.id,
 			metadata: {

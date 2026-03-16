@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { SendMessageInput } from './inputs/send-message.input';
 import { User } from '@/prisma/generated/client';
-import { ChangeChatSettingInput } from './inputs/change-chat-setting.input';
+import { ChangeChatSettingsInput } from './inputs/change-chat-setting.input';
 
 @Injectable()
 export class ChatService {
@@ -54,13 +54,14 @@ export class ChatService {
 			},
 			include: {
 				stream: true,
+				user: true,
 			},
 		});
 
 		return message;
 	}
 
-	public async changeSettings(user: User, input: ChangeChatSettingInput) {
+	public async changeSettings(user: User, input: ChangeChatSettingsInput) {
 		const {
 			isChatEnabled,
 			isChatFollowersOnly,

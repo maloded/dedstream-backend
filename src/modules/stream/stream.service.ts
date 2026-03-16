@@ -121,7 +121,7 @@ export class StreamService {
 
 		const buffer = Buffer.concat(chunks);
 
-		const fileName = `streams/${user.username}.webp`;
+		const fileName = `/streams/${user.username}.webp`;
 
 		if (file.filename && file.filename.endsWith('.gif')) {
 			const processedBuffer = await sharp(buffer, { animated: true })
@@ -240,6 +240,14 @@ export class StreamService {
 				{
 					user: {
 						username: { contains: searchTerm, mode: 'insensitive' },
+					},
+				},
+				{
+					category: {
+						title: {
+							contains: searchTerm,
+							mode: 'insensitive',
+						},
 					},
 				},
 			],

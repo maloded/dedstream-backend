@@ -775,12 +775,10 @@ export type UserCreateNestedOneWithoutNotificationSettingsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutNotificationSettingsNestedInput = {
+export type UserUpdateOneRequiredWithoutNotificationSettingsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationSettingsInput, Prisma.UserUncheckedCreateWithoutNotificationSettingsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationSettingsInput
   upsert?: Prisma.UserUpsertWithoutNotificationSettingsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationSettingsInput, Prisma.UserUpdateWithoutNotificationSettingsInput>, Prisma.UserUncheckedUpdateWithoutNotificationSettingsInput>
 }
