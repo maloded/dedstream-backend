@@ -30,22 +30,30 @@ async function bootstrap() {
 		}),
 	);
 
+	app.enableCors({
+		origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
+		credentials: true,
+		exposedHeaders: ['Set-Cookie'],
+	});
+
+	const isSecure = parseBoolean(config.getOrThrow<string>('SESSION_SECURE'));
+
 	app.use(
 		session({
 			secret: config.getOrThrow<string>('SESSION_SECRET'),
 			name: config.getOrThrow<string>('SESSION_NAME'),
 			resave: false,
 			saveUninitialized: false,
+			// Trust X-Forwarded-Proto so issecure() returns true behind an HTTPS proxy
+			proxy: isSecure,
 			cookie: {
 				domain: config.getOrThrow<string>('SESSION_DOMAIN'),
 				maxAge: ms(config.getOrThrow<StringValue>('SESSION_MAX_AGE')),
 				httpOnly: parseBoolean(
 					config.getOrThrow<string>('SESSION_HTTP_ONLY'),
 				),
-				secure: parseBoolean(
-					config.getOrThrow<string>('SESSION_SECURE'),
-				),
-				sameSite: 'none',
+				secure: isSecure,
+				sameSite: isSecure ? 'none' : 'lax',
 			},
 			store: new RedisStore({
 				client: redis.client,
@@ -53,12 +61,6 @@ async function bootstrap() {
 			}),
 		}),
 	);
-
-	app.enableCors({
-		origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
-		credentials: true,
-		exposedHeaders: ['set-cookie'],
-	});
 
 	await app.listen(config.getOrThrow<number>('APP_PORT') ?? 3000);
 }
