@@ -6,8 +6,6 @@ export function getTelegrafConfig(
 ): TelegrafModuleOptions {
         return {
                 token: ConfigService.getOrThrow<string>('TELEGRAM_BOT_TOKEN'),
-                launchOptions: {
-                        polling: false,
-                },
+                launchOptions: false,
         };
 }
